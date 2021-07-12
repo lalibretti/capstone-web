@@ -1,3 +1,13 @@
+# Tasks to do
+
+----------------
+> Write code to fetch all the questions for a particular category. HINT: Look at the comments in the code and make a fetch call to the backend. You will also need a state variable to store all the questions that come back
+------------------------------------------------
+~~Add Tailwind and ANT design (Optional) to the app.~~
+
+~~Mock out the basic UI. Make sure it is responsive.~~
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
