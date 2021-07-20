@@ -13,7 +13,7 @@ function Callback(key) {
   const [category, setCategory] = useState();
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedQuestion, setSelectedQuestion] = useState();
-  const [question, setQuestion] = useState();
+  const [questions, setQuestion] = useState();
 
   const [showQuestionForm, setShowQuestionForm] = useState(false);
 
@@ -68,28 +68,23 @@ const createQuestion = async () => {
 const onPanelChange = async (questionId) => {
   console.log(questionId)
   let q
-  question.map((question) => {
-      if(question.id === questionId){
+  questions.map((question) => {
+      if(question.id == questionId){
           q = question
       }
   })
   console.log(q)
   setSelectedQuestion(q)
   console.log('panel was clicked')
-
 };
 
-  const text = `
-  A dog is a type of domesticated animal.
-  it can be found as a welcome guest in many households across the world.
-`;
+
   return (
      <div>
       <div className={'flex justify-center p-6 border-b-4 border-gray-300'}>
         <h1 className={'text-4xl uppercase font-bold tracking-wider'}>Capstone App</h1>
 
       </div>
-
 
       <Modal title="New Question" visible={showQuestionForm} closable={false} footer={null}>
             {selectedCategory && <div className={'w-full p-2'}>
@@ -107,7 +102,6 @@ const onPanelChange = async (questionId) => {
 
       <div className={'grid grid-cols-12'}>
         <div className={'col-span-12 md:col-span-2'}>
-          
           <h1>Category Listing</h1>
           {/* <Button type="danger" ghost>Primary Button</Button> */}
           <ul className={'border'}>
@@ -121,9 +115,12 @@ const onPanelChange = async (questionId) => {
 
         <div className={'col-span-12 border md:col-span-10 h-96 bg-gray-300'}>
           <h1>Question/Answer Listing</h1>
-          <Collapse defaultActiveKey={['1']} onChange={Callback}>
-            <Panel header="Question 1" key="1">
-              {selectedCategory && <div className={'w-1/3 p-2'}>
+          
+          {selectedCategory && <div className={'p-4'}>
+                    <button className={'px-4 py-3 bg-blue-500 text-white rounded'} onClick={() => setShowQuestionForm(true)}>New Question</button>
+                </div>} 
+    
+              {/* {selectedCategory && <div className={'w-1/3 p-2'}>
               <textarea value={questionTxt} onChange={(ev)=> setQuestionTxt(ev.currentTarget.value)} 
               type="text" 
               className={'border p-1 full'}
@@ -131,27 +128,29 @@ const onPanelChange = async (questionId) => {
               <button className={'border rounded-md px-4 py-3 bg-blue-500 text-white'} onClick={createQuestion}>Add a Question</button>
               </div>}
               {/* <p>{text}</p> */}
-              <ul>
+              {/* <ul>
               {question && question.map((question) => {
                         return <li key={question.id}>
                             {question.questionTxt}
                         </li>
                     })}
-              </ul>
-            </Panel>
-            {/* <Panel header="Question 2" key="2">
-              <p>{text}</p>
-            </Panel>
-            <Panel header="Question 3" key="3">
-              <p>{text}</p>
-            </Panel>
-            <Panel header="Question 4" key="4">
-              <p>{text}</p>
-            </Panel>
-            <Panel header="Question 5" key="5">
-              <p>{text}</p>
-            </Panel> */}
-          </Collapse>
+              </ul> */}
+          
+               {selectedCategory ? <h1 className={'text-center text-4xl uppercase'}>Questions</h1> : <h1 className={'text-center text-4xl mt-20 uppercase text-blue-500'}>Select a Category to continue</h1>} 
+
+              <p>{JSON.stringify(selectedQuestion)}</p>
+              {selectedCategory && questions && questions.length > 0 && <div className={'flex justify-center px-24 w-full'}>
+                <Collapse accordion className={'w-full'} onChange={onPanelChange}>
+                  {questions && questions.map((question) => {
+                    return <Panel header={question.questionTxt} key={question.id}>
+
+                                <p>This is where you add the answers list for this particular question</p>
+
+                                <button className={'px-2 py-1 bg-blue-500 text-white rounded'}>New Answer</button>
+                                </Panel>
+                        })}
+                    </Collapse>
+                </div>}
         </div>
       </div>
     </div>
