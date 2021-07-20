@@ -14,10 +14,13 @@ function Callback(key) {
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedQuestion, setSelectedQuestion] = useState();
   const [questions, setQuestion] = useState();
+  const [answers, setAnswer] = useState();
 
   const [showQuestionForm, setShowQuestionForm] = useState(false);
+  const [showAnswerForm, setShowAnswerForm] = useState(false);
 
   const [questionTxt, setQuestionTxt] = useState('');
+  const [answerTxt, setAnswerTxt] = useState();
 
   const fetchCategories = async () => {
     let res = await fetch('http://localhost:3000/api/v1/category')
@@ -38,13 +41,19 @@ const fetchQuestions = async (category) => {
   let data = await res.json()
   console.log(data)
   setQuestion(data)
-  
+};
+const fetchAnswer = async (question) => {
+  console.log(question)
+  let res = await fetch(`http://localhost:3000/api/v1/questions/${question.id}/answers`)
+  let data = await res.json()
+  console.log(data)
+  setAnswer(data)
 };
 
 const switchCategory = async (category) => {
   console.log('the selcted category is', category)
   setSelectedCategory(category)
-  // write code here to fetch the questions for the selected category
+  
   fetchQuestions(category)
 
 };
@@ -75,7 +84,23 @@ const onPanelChange = async (questionId) => {
   })
   console.log(q)
   setSelectedQuestion(q)
-  console.log('panel was clicked')
+  console.log('panel was clicked')  
+};
+const createAnswer = async () => {
+  console.log('answerTxt', answerTxt)
+  console.log('selectedQuestion', selectedQuestion)
+  let res = await fetch(`http://localhost:3000/api/v1/questions/${selectedQuestion.id}/answers`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({answerTxt: answerTxt})
+  })
+  let data = await res.json()
+  console.log(data)
+  fetchAnswer(selectedQuestion)
+        setAnswerTxt('')
+      //  setAnswerForm(false)
 };
 
 
@@ -120,33 +145,33 @@ const onPanelChange = async (questionId) => {
                     <button className={'px-4 py-3 bg-blue-500 text-white rounded'} onClick={() => setShowQuestionForm(true)}>New Question</button>
                 </div>} 
     
-              {/* {selectedCategory && <div className={'w-1/3 p-2'}>
-              <textarea value={questionTxt} onChange={(ev)=> setQuestionTxt(ev.currentTarget.value)} 
-              type="text" 
-              className={'border p-1 full'}
-              placeholder={'Enter a Question'} />
-              <button className={'border rounded-md px-4 py-3 bg-blue-500 text-white'} onClick={createQuestion}>Add a Question</button>
-              </div>}
-              {/* <p>{text}</p> */}
-              {/* <ul>
-              {question && question.map((question) => {
-                        return <li key={question.id}>
-                            {question.questionTxt}
-                        </li>
-                    })}
-              </ul> */}
-          
-               {selectedCategory ? <h1 className={'text-center text-4xl uppercase'}>Questions</h1> : <h1 className={'text-center text-4xl mt-20 uppercase text-blue-500'}>Select a Category to continue</h1>} 
+           {selectedCategory ? <h1 className={'text-center text-4xl uppercase'}>Questions</h1> : <h1 className={'text-center text-4xl mt-20 uppercase text-blue-500'}>Select a Category to answer a question!</h1>} 
 
-              <p>{JSON.stringify(selectedQuestion)}</p>
-              {selectedCategory && questions && questions.length > 0 && <div className={'flex justify-center px-24 w-full'}>
-                <Collapse accordion className={'w-full'} onChange={onPanelChange}>
-                  {questions && questions.map((question) => {
-                    return <Panel header={question.questionTxt} key={question.id}>
+          <p>{JSON.stringify(selectedQuestion)}</p>
+          {selectedCategory && questions && questions.length > 0 && <div className={'flex justify-center px-24 w-full'}>
+            <Collapse accordion className={'w-full'} onChange={onPanelChange}>
+              {questions && questions.map((question) => {
+                return <Panel header={question.questionTxt} key={question.id}>
+                  <Modal title="New Answer" visible={showAnswerForm} closable={false} footer={null}>
+                    {selectedQuestion && <div className={'w-full p-2'}>
+                      <textarea value={answerTxt}
+                        onChange={(ev) => setAnswerTxt(ev.currentTarget.value)}
+                        type="text"
+                        rows={4}
+                        className={'border p-1 w-full mb-4'}
+                        placeholder={'Enter the answer text...'} />
 
-                                <p>This is where you add the answers list for this particular question</p>
-
-                                <button className={'px-2 py-1 bg-blue-500 text-white rounded'}>New Answer</button>
+                      <button className={'px-4 py-3 bg-blue-500 text-white rounded mr-4'} onClick={createAnswer}>Add Answer</button>
+                      <button className={'px-4 py-3 bg-red-500 text-white rounded'} onClick={() => setShowAnswerForm(false)}>Cancel</button>
+                    </div>}
+                  </Modal>
+                  <p>{JSON.stringify(selectedQuestion)}</p>
+          {selectedQuestion && answers && answers.length > 0 && <div className={'flex justify-center px-24 w-full'}></div>
+                      }{answers && answers.map((answers) => {
+                        return <p header={answers.answerTxt} key={question.id}></p>
+                      })}
+                                <button onClick={() => setShowAnswerForm(true)} className={'px-2 py-1 bg-blue-500 text-white rounded'}>Add Answer</button>
+                
                                 </Panel>
                         })}
                     </Collapse>
