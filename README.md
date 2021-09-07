@@ -1,3 +1,10 @@
+# Quiz Creator 
+> A sorted question/answer creator. Powered by React, Tailwind, Node.js, sequelize, and Mysql. Simple clean minimal design to create questions by category. 
+
+
+> Created as final project for bootcamp. 
+
+
 # Tasks to do
 
 > Make sure that the "QUESTIONS" text does not show up if there are no questions to show when you select a category.
@@ -14,11 +21,7 @@
 
 > Add a button to invoke a modal to add a question (.post request)
 ----------------
-~~Write code to fetch all the questions for a particular category. HINT: Look at the comments in the code and make a fetch call to the backend. You will also need a state variable to store all the questions that come back~~
-------------------------------------------------
-~~Add Tailwind and ANT design (Optional) to the app.~~
 
-~~Mock out the basic UI. Make sure it is responsive.~~
 
 
 # Getting Started with Create React App
